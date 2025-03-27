@@ -1,0 +1,87 @@
+{
+    "SeniorCitizensFD": {
+      "SpecialEditionFD": {
+        "2Years11Months": {
+          "HDFC": "7.75%",
+          "ICICI": "7.50%",
+          "SBI": "7.60%",
+          "KotakMahindra": "7.65%",
+          "IndianBank": "7.30%"
+        },
+        "4Years7Months": {
+          "HDFC": "7.75%",
+          "ICICI": "7.60%",
+          "SBI": "7.55%",
+          "KotakMahindra": "7.70%",
+          "IndianBank": "7.40%"
+        }
+      },
+      "TaxSaverFD": {
+        "5Years": {
+          "HDFC": "7.25%",
+          "ICICI": "7.00%",
+          "SBI": "6.90%",
+          "KotakMahindra": "7.10%",
+          "IndianBank": "6.75%"
+        }
+      },
+      "MonthlyIncomePlan": {
+        "1Year": {
+          "HDFC": "6.00%",
+          "ICICI": "5.75%",
+          "SBI": "6.00%",
+          "KotakMahindra": "6.10%",
+          "IndianBank": "5.80%"
+        },
+        "3Years": {
+          "HDFC": "6.50%",
+          "ICICI": "6.25%",
+          "SBI": "6.50%",
+          "KotakMahindra": "6.60%",
+          "IndianBank": "6.30%"
+        },
+        "5Years": {
+          "HDFC": "6.75%",
+          "ICICI": "6.50%",
+          "SBI": "6.75%",
+          "KotakMahindra": "6.90%",
+          "IndianBank": "6.50%"
+        }
+      },
+      "ReinvestmentFD": {
+        "1Year": {
+          "HDFC": "6.25%",
+          "ICICI": "6.00%",
+          "SBI": "6.20%",
+          "KotakMahindra": "6.10%",
+          "IndianBank": "5.90%"
+        },
+        "3Years": {
+          "HDFC": "6.75%",
+          "ICICI": "6.50%",
+          "SBI": "6.70%",
+          "KotakMahindra": "6.60%",
+          "IndianBank": "6.40%"
+        },
+        "5Years": {
+          "HDFC": "7.00%",
+          "ICICI": "6.75%",
+          "SBI": "6.90%",
+          "KotakMahindra": "6.90%",
+          "IndianBank": "6.60%"
+        }
+      },
+      "SpecialSchemes": {
+        "444Days": {
+          "SBI": "7.75%"
+        },
+        "400Days": {
+          "SBI": "7.60%"
+        },
+        "555Days": {
+          "IndianBank": "7.30%"
+        }
+      }
+    }
+  }
+  

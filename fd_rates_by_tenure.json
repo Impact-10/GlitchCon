@@ -1,0 +1,59 @@
+{
+    "7 - 14 days": {
+        "HDFC": "3.5%"
+    },
+    "15 - 29 days": {
+        "HDFC": "3.5%"
+    },
+    "30 - 45 days": {
+        "HDFC": "4.0%"
+    },
+    "46 - 60 days": {
+        "HDFC": "5.0%"
+    },
+    "61 - 89 days": {
+        "HDFC": "5.0%"
+    },
+    "90 days < = 6 months": {
+        "HDFC": "5.0%"
+    },
+    "6 months 1 days  < = 9 months": {
+        "HDFC": "6.25%"
+    },
+    "9 months 1 day to < 1 year": {
+        "HDFC": "6.5%"
+    },
+    "1 year to < 15 months": {
+        "HDFC": "7.1%"
+    },
+    "15 months to < 18 months": {
+        "HDFC": "7.6%"
+    },
+    "18 months to < 21 months": {
+        "HDFC": "7.75%"
+    },
+    "21 months - 2 years": {
+        "HDFC": "7.5%"
+    },
+    "2 Years 1 day to < 2 Year 11 Months": {
+        "HDFC": "7.5%"
+    },
+    "2 Years 11 Months - 35 Months": {
+        "HDFC": "7.85%"
+    },
+    "2 Years 11 Months 1 day < = 3 Year": {
+        "HDFC": "7.5%"
+    },
+    "3 Years 1 day to < 4 Years 7 Months": {
+        "HDFC": "7.5%"
+    },
+    "4 Year 7 Months - 55 months": {
+        "HDFC": "7.9%"
+    },
+    "4 Year 7 Months 1 day < = 5 Years": {
+        "HDFC": "7.5%"
+    },
+    "5 Years 1 day - 10 Years": {
+        "HDFC": "7.5%"
+    }
+}
