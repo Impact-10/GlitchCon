@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FD Rate Comparison</title>
+    <link rel="stylesheet" href="../allset/allstyles.css">
+    <style>
+        * {
+            font-size: 20px !important;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .file-upload-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .file-upload-container input {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .button-container button {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+
+        .table-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table {
+            width: 80%;
+            border: 1px solid #ddd;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        td:hover {
+            background-color: #e0f7fa;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- File Upload Section -->
+    <div class="file-upload-container">
+        <input type="file" id="file-input" accept=".json" />
+    </div>
+
+    <div class="button-container">
+        <button onclick="loadData('SpecialEditionFD')">Senior Citizens FD</button>
+        <button onclick="loadData('TaxSaverFD')">Tax Saver FD</button>
+        <button onclick="loadData('MonthlyIncomePlan')">Monthly Income Plan</button>
+        <button onclick="loadData('ReinvestmentFD')">Reinvestment FD</button>
+        <button onclick="loadData('SpecialSchemes')">Special Schemes</button>
+    </div>
+
+    <div class="table-container">
+        <table id="fd-table">
+            <thead>
+                <tr id="banks-header">
+                    <th>Tenure</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table Data will be populated here dynamically -->
+            </tbody>
+        </table>
+    </div>
+    <button class="chat-toggle">Chat</button>
+        
+    <aside class="sidebar">
+        <header class="sidebar-header">
+            <h4>Chatbox</h4>
+            <button class="chevron">&lt;</button>
+        </header>
+        <section class="secondary-section">
+            <div class="chatbox">
+                <p>Welcome to the chat!</p>
+            </div>
+        </section>
+    </aside>
+    <script>
+        let fdData = {}; // Data to store the JSON from file
+
+        // Listen to file selection event
+        document.getElementById('file-input').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type === "application/json") {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        fdData = JSON.parse(e.target.result);
+                        console.log("File loaded successfully! Here is the JSON data: ", fdData);
+                        alert("File loaded successfully!");
+                    } catch (error) {
+                        alert("Error parsing JSON data: " + error.message);
+                        console.error("Error parsing JSON: ", error);
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                alert("Please select a valid JSON file.");
+            }
+        });
+
+        // Function to load data into the table dynamically
+        function loadData(fdType) {
+            console.log("Loading data for:", fdType);
+
+            if (!fdData[fdType]) {
+                alert("No data available for " + fdType);
+                console.log("No data found for:", fdType);
+                return;
+            }
+
+            const data = fdData[fdType];
+            const tableBody = document.querySelector("#fd-table tbody");
+            const header = document.querySelector("#banks-header");
+
+            // Clear previous data
+            tableBody.innerHTML = "";
+            header.innerHTML = "<th>Tenure</th>"; // Reset header
+
+            // Get the list of banks (from any tenure)
+            const firstTenure = Object.keys(data)[0];
+            const banks = Object.keys(data[firstTenure]);
+
+            // Create header row with bank names
+            banks.forEach(bank => {
+                const th = document.createElement("th");
+                th.textContent = bank;
+                header.appendChild(th);
+            });
+
+            // Create rows for each tenure (Y-Axis)
+            Object.keys(data).forEach(tenure => {
+                const row = document.createElement("tr");
+
+                // Tenure cell (Y-Axis)
+                const tdTenure = document.createElement("td");
+                tdTenure.textContent = tenure;
+                row.appendChild(tdTenure);
+
+                // Add FD rate data for each bank (X-Axis)
+                banks.forEach(bank => {
+                    const td = document.createElement("td");
+                    // Get rate for this tenure and bank, if available
+                    td.textContent = data[tenure]?.[bank] || "-";
+                    row.appendChild(td);
+                });
+
+                tableBody.appendChild(row);
+            });
+        }
+    </script>
+    <script src="../allset/allscript.js"></script>
+
+</body>
+</html>

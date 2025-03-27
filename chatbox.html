@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice-Enabled Chatbot</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        #chatbox { width: 60%; margin: auto; padding: 10px; border: 1px solid #ccc; min-height: 200px; text-align: left; }
+        .user { color: blue; font-weight: bold; }
+        .bot { color: green; font-weight: bold; }
+        button { padding: 10px 20px; margin: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h2>Chatbot with Voice Input & Output</h2>
+    
+    <div id="chatbox"></div>
+
+    <input type="text" id="userInput" placeholder="Type or speak..." />
+    <button onclick="sendMessage()">Send</button>
+    <button onclick="startListening()">🎤 Speak</button>
+
+    <script>
+        // Function to append messages to the chatbox
+        function appendMessage(sender, text) {
+            let chatbox = document.getElementById("chatbox");
+            let message = document.createElement("p");
+            message.innerHTML = `<span class="${sender}">${sender}:</span> ${text}`;
+            chatbox.appendChild(message);
+        }
+
+        // Function to send message to FastAPI chatbot
+        async function sendMessage() {
+            let userInput = document.getElementById("userInput").value;
+            if (!userInput) return;
+
+            appendMessage("You", userInput);
+
+            let response = await fetch("http://127.0.0.1:8000/api/chatbot", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userInput })
+            });
+
+            let data = await response.json();
+            let botResponse = data.response || "Sorry, I couldn't understand.";
+
+            appendMessage("Bot", botResponse);
+            speakResponse(botResponse);  // Make the bot speak
+            document.getElementById("userInput").value = "";
+        }
+
+        // Function to enable speech recognition (voice input)
+        function startListening() {
+            let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = "en-US";
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                let spokenText = event.results[0][0].transcript;
+                document.getElementById("userInput").value = spokenText;
+                sendMessage();  // Auto-send the recognized speech
+            };
+
+            recognition.onerror = function(event) {
+                console.log("Speech recognition error:", event.error);
+            };
+        }
+
+        // Function to make the bot speak (text-to-speech)
+        function speakResponse(text) {
+            let speech = new SpeechSynthesisUtterance(text);
+            speech.lang = "en-US";
+            speech.rate = 1.0;  // Normal speed
+            speechSynthesis.speak(speech);
+        }
+    </script>
+
+</body>
+</html>

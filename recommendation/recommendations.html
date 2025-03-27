@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FD Recommendation</title>
+    <link rel="stylesheet" href="../allset/allstyles.css">
+    <style>
+        * {
+            font-size: 20px !important;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 50%;
+        }
+        input, button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            width: 80%;
+        }
+        .recommendation {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            width: 30%;
+            min-width: 250px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .benefits, .risks {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .benefits {
+            color: green;
+        }
+        .risks {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="container">
+        <h2>FD Recommendation System</h2>
+        <label for="principal">Principal Amount:</label>
+        <input type="number" id="principal" placeholder="Enter principal amount">
+        <br>
+        <label for="tenure">Tenure (months or years):</label>
+        <input type="text" id="tenure" placeholder="e.g. 12 months or 3 years">
+
+        <button onclick="getRecommendation()">Get Recommendations</button>
+    </div>
+    <h3>These recommendations are of a safer nature compared to the chatbot recommendations and give the benefits and risks along with it</h3>
+
+    <div class="output-container" id="output"></div>
+    <button class="chat-toggle">Chat</button>
+        
+    <aside class="sidebar">
+        <header class="sidebar-header">
+            <h4>Chatbox</h4>
+            <button class="chevron">&lt;</button>
+        </header>
+        <section class="secondary-section">
+            <div class="chatbox">
+                <p>Welcome to the chat!</p>
+            </div>
+        </section>
+    </aside>
+
+    <script>
+        const fdData = {
+            "SpecialEditionFD": {
+                "12Months": { "HDFC": 7.10, "ICICI": 7.20, "SBI": 7.30, "KotakMahindra": 7.60, "IndianBank": 7.25 },
+                "36Months": { "HDFC": 7.50, "ICICI": 7.50, "SBI": 7.50, "KotakMahindra": 7.65, "IndianBank": 7.50 },
+                "60Months": { "HDFC": 7.50, "ICICI": 7.50, "SBI": 7.50, "KotakMahindra": 7.65, "IndianBank": 7.50 }
+            },
+            "FlexiFD": { "HDFC": 7.40, "ICICI": 7.00, "SBI": 6.90, "KotakMahindra": 7.10, "IndianBank": 6.75 },
+            "FDSweepIn": { "HDFC": 7.20, "ICICI": 6.90, "SBI": 7.00, "KotakMahindra": 7.05, "IndianBank": 6.80 }
+        };
+
+        function getRecommendation() {
+            let principal = document.getElementById("principal").value;
+            let tenure = document.getElementById("tenure").value.trim();
+            let outputDiv = document.getElementById("output");
+            outputDiv.innerHTML = "";
+
+            
+            if (!principal || !tenure) {
+                alert("Please enter both Principal Amount and Tenure.");
+                return;
+            }
+
+            let tenureKey = formatTenure(tenure);
+            if (!tenureKey) {
+                alert("Invalid tenure format. Use formats like '12 months' or '3 years'.");
+                return;
+            }
+
+            let closestTenure = findClosestTenure(tenureKey);
+            let bestFD = findBestFD(closestTenure);
+            let flexiFD = findBestFlexiFD();
+            let sweepFD = findBestSweepFD();
+
+            outputDiv.innerHTML += generateRecommendation(`Best Fixed FD [Closest Tenure: ${closestTenure}]`, bestFD);
+            outputDiv.innerHTML += generateRecommendation("Flexi FD (For Liquidity Needs)", flexiFD);
+            outputDiv.innerHTML += generateRecommendation("FD Sweep-In (For Additional Investments)", sweepFD);
+        }
+
+        function formatTenure(tenure) {
+            let match = tenure.match(/^(\d+)\s*(months?|years?)$/i);
+            if (!match) return null;
+
+            let value = parseInt(match[1]);
+            let unit = match[2].toLowerCase();
+
+            if (unit.startsWith("year")) return `${value * 12}Months`;
+            if (unit.startsWith("month")) return `${value}Months`;
+            return null;
+        }
+
+        function findClosestTenure(tenureKey) {
+            let availableTenures = Object.keys(fdData["SpecialEditionFD"])
+                .map(t => parseInt(t.replace("Months", "")))
+                .sort((a, b) => a - b);
+
+            let requestedTenure = parseInt(tenureKey.replace("Months", ""));
+            let closest = availableTenures.reduce((prev, curr) => 
+                Math.abs(curr - requestedTenure) < Math.abs(prev - requestedTenure) ? curr : prev
+            );
+
+            return `${closest}Months`;
+        }
+
+        function findBestFD(tenureKey) {
+            let fdOptions = fdData["SpecialEditionFD"][tenureKey];
+            if (!fdOptions) return null;
+
+            let bestBank = Object.keys(fdOptions).reduce((a, b) => fdOptions[a] > fdOptions[b] ? a : b);
+            return { bank: bestBank, rate: fdOptions[bestBank] };
+        }
+
+        function findBestFlexiFD() {
+            let flexiOptions = fdData["FlexiFD"];
+            let bestBank = Object.keys(flexiOptions).reduce((a, b) => flexiOptions[a] > flexiOptions[b] ? a : b);
+            return { bank: bestBank, rate: flexiOptions[bestBank] };
+        }
+
+        function findBestSweepFD() {
+            let sweepOptions = fdData["FDSweepIn"];
+            let bestBank = Object.keys(sweepOptions).reduce((a, b) => sweepOptions[a] > sweepOptions[b] ? a : b);
+            return { bank: bestBank, rate: sweepOptions[bestBank] };
+        }
+
+        function generateRecommendation(title, recommendation) {
+            if (!recommendation) return `<div class='recommendation'><p>No data available for this option.</p></div>`;
+
+            let benefits = title.includes("Fixed FD") ? ["Fixed interest rate for the entire tenure.", "Ideal for long-term savings."]
+                        : title.includes("Flexi FD") ? ["Can withdraw cash anytime.", "Provides flexibility while still earning interest."]
+                        : ["Automatic transfer of surplus funds to FD.", "Helps accumulate savings quickly."];
+
+            let risks = title.includes("Fixed FD") ? ["Cannot withdraw before tenure ends.", "Miss out on rising interest rates."]
+                    : title.includes("Flexi FD") ? ["Lower interest rate than standard FD.", "Partial withdrawals reduce overall returns."]
+                    : ["Interest rates fluctuate.", "Partial withdrawal may break FD portions."];
+
+            return `
+                <div class='recommendation'>
+                    <div class='title'>${title}</div>
+                    <p>🏦 ${recommendation.bank} | 💰 ${recommendation.rate}%</p>
+                    <div class='benefits'>✅ Benefits: ${benefits.join(", ")}</div>
+                    <div class='risks'>⚠️ Risks: ${risks.join(", ")}</div>
+                </div>
+            `;
+        }
+    </script>
+    <script src="../allset/allscript.js"></script> 
+</body>
+</html>

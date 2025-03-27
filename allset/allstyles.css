@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100;
+}
+
+main {
+    transition: margin-right 0.5s ease;
+    margin-right: 0;
+    background: white;
+}
+
+main.shrink {
+    margin-right: 250px; /* Adjust based on sidebar width */
+}
+.secondary-section {
+    display: flex;
+    justify-content: flex-end;
+}
+.chatbox {
+    width: 400px;
+    height: 400px;
+    margin: 30px;
+}
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    background-color:rgb(25, 20, 40);
+    position: fixed;
+    right: 0;
+    top: 0;
+    transition: all 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    transform: translateX(100%);
+}
+
+.sidebar.expanded {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    color: white;
+    align-items: center;
+}
+
+.chevron {
+    height: max-content;
+    width: max-content;
+    background: rgb(212, 223, 238);
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.chevron:hover {
+    background: rgb(69, 175, 227);
+}
+
+.chatbox {
+    width: 90%;
+    height: 80vh;
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: max-content;
+    font-size: 25px !important;
+    background: rgb(33, 35, 82);
+    color: white;
+    padding: 10px 20px;
+    border: 2px solid white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.chat-toggle:hover {
+    background: white;
+    color: rgb(33, 35, 82);
+    border: 3px solid rgb(33, 35, 82);
+    transform: scale(1.05);
+}
